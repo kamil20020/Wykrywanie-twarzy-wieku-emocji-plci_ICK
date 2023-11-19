@@ -9,8 +9,8 @@ class FaceRegistration(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="white")
         
-        logoRegisterFaceImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "faceRegister128.png"))
-        backToCalibrationButtonImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "back64.png"))
+        logoRegisterFaceImage = PhotoImage(file="./assets/faceRegister128.png")
+        backToCalibrationButtonImage = PhotoImage(file="./assets/back64.png")
 
         labellogoRegisterFace = tk.Label(self, text="Rejestracja twarzy", image=logoRegisterFaceImage, compound = TOP, pady=20, font = fnt.Font(size = 18), bg="white")
         labellogoRegisterFace.image = logoRegisterFaceImage

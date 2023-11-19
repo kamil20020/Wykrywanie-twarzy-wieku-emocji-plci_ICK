@@ -10,12 +10,12 @@ class MainMenu(tk.Frame):
         tk.Frame.__init__(self, parent, bg="white")
         
         
-        logoMainMenuImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "logo128.png"))
-        addUserImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "add-user64.png"))
-        calibrationImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "calibrate64.png"))
-        webcamImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "webcam64.png")) 
-        historyImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "history64.png"))
-        quitImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "quit64.png"))
+        logoMainMenuImage = PhotoImage(file="./assets/logo128.png")
+        addUserImage = PhotoImage(file="./assets/add-user64.png")
+        calibrationImage = PhotoImage(file="./assets/calibrate64.png")
+        webcamImage = PhotoImage(file="./assets/webcam64.png")
+        historyImage = PhotoImage(file="./assets/history64.png")
+        quitImage = PhotoImage(file="./assets/quit64.png")
 
         # Logo in main menu
         labelLogoMainMenu = tk.Label(self, text="Welcome to the Start Page!", image=logoMainMenuImage, bg="white")

@@ -19,11 +19,11 @@ class DetectHistory(tk.Frame):
                 entryPassword.config(show='*')
                 showHidePasswordButton.configure(image=showPasswordImage)
         
-        logoHistoryImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "history64.png"))
-        showPasswordImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "show24.png"))
-        hidePasswordImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "hide24.png"))
-        backButtonImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "back64.png"))
-        confirmButtonImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "confirm64.png"))
+        logoHistoryImage = PhotoImage(file="./assets/history64.png")
+        showPasswordImage = PhotoImage(file="./assets/show24.png")
+        hidePasswordImage = PhotoImage(file="./assets/hide24.png")
+        backButtonImage = PhotoImage(file="./assets/back64.png")
+        confirmButtonImage = PhotoImage(file="./assets/confirm64.png")
 
         labellogoHistory = tk.Label(self, text="Historia wykrywania", image=logoHistoryImage, compound = TOP, pady=20, font = fnt.Font(size = 12), bg="white")
         labellogoHistory.image = logoHistoryImage

@@ -18,12 +18,12 @@ class CalibrateUser(tk.Frame):
                 entryPassword.config(show='*')
                 showHidePasswordButton.configure(image=showPasswordImage)
 
-        logoCalibrateImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "calibrate128.png"))
-        showPasswordImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "show24.png"))
-        hidePasswordImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "hide24.png"))
-        registerFaceImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "faceRegister64.png"))
-        trainModelImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "train64.png"))
-        backButtonImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "back64.png"))
+        logoCalibrateImage = PhotoImage(file="./assets/calibrate128.png")
+        showPasswordImage = PhotoImage(file="./assets/show24.png")
+        hidePasswordImage = PhotoImage(file="./assets/hide24.png")
+        registerFaceImage = PhotoImage(file="./assets/faceRegister64.png")
+        trainModelImage = PhotoImage(file="./assets/train64.png")
+        backButtonImage = PhotoImage(file="./assets/back64.png")
 
 
         labellogoAddUser = tk.Label(self, text="Kalibracja użytkownika", image=logoCalibrateImage, compound = TOP, pady=20, font = fnt.Font(size = 18), bg="white")

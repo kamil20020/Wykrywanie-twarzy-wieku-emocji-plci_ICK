@@ -21,11 +21,11 @@ class AddUser(tk.Frame):
                 showHidePasswordButton.configure(image=showPasswordImage)
 
 
-        logoAddUserImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "add-user128.png"))
-        backButtonImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "back64.png"))
-        confirmButtonImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "confirm64.png"))
-        showPasswordImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "show24.png"))
-        hidePasswordImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "hide24.png"))
+        logoAddUserImage = PhotoImage(file="./assets/add-user128.png")
+        backButtonImage = PhotoImage(file="./assets/back64.png")
+        confirmButtonImage = PhotoImage(file="./assets/confirm64.png")
+        showPasswordImage = PhotoImage(file="./assets/show24.png")
+        hidePasswordImage = PhotoImage(file="./assets/hide24.png")
 
         #Logo for adding new user screen
         labellogoAddUser = tk.Label(self, text="Dodawanie użytkownika", image=logoAddUserImage, compound = TOP, pady=20, font = fnt.Font(size = 18), bg="white")

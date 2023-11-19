@@ -9,8 +9,8 @@ class Help(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="white")
         
-        logoHelpImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "help64.png"))
-        backButtonImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "back64.png"))
+        logoHelpImage = PhotoImage(file="./assets/help64.png")
+        backButtonImage = PhotoImage(file="./assets/back64.png")
 
         labellogoHelp = tk.Label(self, text="Pomoc", image=logoHelpImage, compound = TOP, pady=20, font = fnt.Font(size = 12), bg="white")
         labellogoHelp.image = logoHelpImage

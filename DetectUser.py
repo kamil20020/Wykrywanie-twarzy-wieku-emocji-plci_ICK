@@ -12,8 +12,8 @@ class DetectUser(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="white")
         
-        backButtonImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "back64.png"))
-        logoDetectUserImage = PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "webcam64.png"))
+        backButtonImage = PhotoImage(file="./assets/back64.png")
+        logoDetectUserImage = PhotoImage(file="./assets/webcam64.png")
 
         labellogoDetectUser = tk.Label(self, text="Wykrywanie użytkownika", image=logoDetectUserImage, compound = TOP, pady=10, font = fnt.Font(size = 10), bg="white")
         labellogoDetectUser.image = logoDetectUserImage
@@ -55,7 +55,7 @@ class DetectUser(tk.Frame):
             return
 
         # Load the cascade
-        face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+        face_cascade = cv2.CascadeClassifier('./assets/haarcascade_frontalface_default.xml')
 
         # Convert into grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
