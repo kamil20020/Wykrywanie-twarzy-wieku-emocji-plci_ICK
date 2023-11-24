@@ -9,14 +9,11 @@ def turnOn():
    
         if vid.isOpened():
             return False
-        
-        vid.retrieve()
-        return True
 
     vid = cv2.VideoCapture(0)
     
-    vid.set(cv2.CAP_PROP_FRAME_WIDTH, 50) 
-    vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 20)
+    vid.set(cv2.CAP_PROP_FRAME_WIDTH, 500) 
+    vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 350)
 
     return True
 
@@ -27,9 +24,12 @@ def turnOff():
         return False
 
     vid.release()
-    vid.retrieve()
 
     return True
+
+def isOpened():
+    return vid is not None and vid.isOpened()
+
 
 def getFrame():
     global vid
