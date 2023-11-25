@@ -26,10 +26,16 @@ class CalibrateUser(tk.Frame):
         backButtonImage = PhotoImage(file="./assets/back64.png")
 
 
-        labellogoAddUser = tk.Label(self, text="Kalibracja użytkownika", image=logoCalibrateImage, compound = TOP, pady=20, font = fnt.Font(size = 18), bg="white")
-        labellogoAddUser.image = logoCalibrateImage
+        labellogoCalibrateUser = tk.Label(self, text="Kalibracja użytkownika", image=logoCalibrateImage, compound = TOP, pady=20, font = fnt.Font(size = 18), bg="white")
+        labellogoCalibrateUser.image = logoCalibrateImage
 
-        dropDownFrame = tk.Frame(self, bg="white")
+        #Label for info if user has been sucessfully registe#d1d1d1 or not
+        labelRegistrationInfo = tk.Label(self, text="Niepoprawne hasło, spróbuj ponownie", fg='red', bg="white", pady=5)
+
+        loginWidgetsFrame = tk.Frame(self, bg="white")
+
+        dropDownFrame = tk.Frame(loginWidgetsFrame, bg="white")
+        dropDownFrame.pack(anchor=tk.W)
 
         labelChooseUsername = tk.Label(dropDownFrame, text="Wybierz użytkownika: ", bg="white").pack(side='left', padx=5)
         #Dropdown to choose user
@@ -39,12 +45,13 @@ class CalibrateUser(tk.Frame):
         chooseUserDropdown = ttk.OptionMenu(dropDownFrame, variable, *users).pack(side='left', padx=5)
         #chooseUserDropdown.config(width=30)
 
-        passwordFrame = tk.Frame(self, bg="white", pady=10)
+        passwordFrame = tk.Frame(loginWidgetsFrame, bg="white", pady=10)
+        passwordFrame.pack(anchor=tk.W)
 
         labelTypePassword = tk.Label(passwordFrame, text="Podaj hasło: ", bg="white").pack(side='left', padx=5)
         entryPassword = ttk.Entry(passwordFrame, show="*", textvariable="password")
         entryPassword.pack(side='left', padx=5)
-        showHidePasswordButton = tk.Button(passwordFrame, image=showPasswordImage, bg="white", borderwidth=0, compound = TOP, pady = 10, cursor="hand2", command=togglePasswordVisibility)
+        showHidePasswordButton = tk.Button(passwordFrame, image=showPasswordImage, bg="white", borderwidth=0, compound = TOP, cursor="hand2", command=togglePasswordVisibility)
         showHidePasswordButton.image = showPasswordImage
         showHidePasswordButton.pack(side='left', padx=5)
         changeOnHover(showHidePasswordButton, "#d1d1d1", "white")
@@ -70,9 +77,9 @@ class CalibrateUser(tk.Frame):
         changeOnHover(backButton, "#d1d1d1", "white")
 
         
-        labellogoAddUser.pack()
-        dropDownFrame.pack(pady=(30,30))
-        passwordFrame.pack()
-        utilButtonsFrame.pack(pady=(130,30))
-        backButton.pack()
+        labellogoCalibrateUser.pack()
+        labelRegistrationInfo.pack(pady=10)
+        loginWidgetsFrame.pack(pady=20)
+        utilButtonsFrame.pack(pady=30)
+        backButton.pack(pady=30)
         
