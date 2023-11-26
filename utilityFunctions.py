@@ -1,5 +1,7 @@
 import cv2
 import hashlib
+import os
+
 # function to change properties of button on hover
 def changeOnHover(button, colorOnHover, colorOnLeave):
         
@@ -13,7 +15,6 @@ def changeOnHover(button, colorOnHover, colorOnLeave):
         background=colorOnLeave))
 
 def load_users():
-
     users = []
 
     with open('pwd', 'r') as file:
@@ -50,3 +51,12 @@ def checkIfInputsEmpty(input):
 
 def checkIfUserExists(username):
     return username in load_users()
+
+def checkIfUserDirExist(username):
+    
+    path = "./data/" + username
+    
+    if os.path.exists(path) and os.path.isdir(path):
+        return True
+    else:
+        return False

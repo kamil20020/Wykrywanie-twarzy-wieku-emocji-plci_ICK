@@ -7,13 +7,14 @@ import cv2
 from utilityFunctions import changeOnHover
 from Camera import turnOn, turnOff, getFrame, isOpened
 from DetectUser import face_cascade
-from CreateDataset import start_capture
 from CreateClassifier import train_classifer
 from tkinter import messagebox
 
 class FaceRegistration(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="white")
+        
+        self.controller = controller
         
         logoRegisterFaceImage = PhotoImage(file="./assets/faceRegister64.png")
         backToCalibrationButtonImage = PhotoImage(file="./assets/back64.png")
@@ -66,7 +67,7 @@ class FaceRegistration(tk.Frame):
         
     def prepareRegister(self):
         try:
-            os.makedirs("./data/adam")
+            os.makedirs("./data/" + self.controller.loggedUser)
         except:
             print('Directory Already Created')
 
@@ -97,12 +98,13 @@ class FaceRegistration(tk.Frame):
 
         # Draw the rectangle around each face
         for (x, y, w, h) in faces:
-            face = frame[y:y+h, x:x+w]
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+            face = frame[y:y+h, x:x+w].copy()
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
         try :
             self.num_of_samples += 1
-            cv2.imwrite("./data/adam/" + str(self.num_of_samples) + "adam.jpg", face)
+            cv2.imwrite("./data/" + self.controller.loggedUser + "/" + str(self.num_of_samples) + self.controller.loggedUser + ".jpg", face)
+            
             percentage = round(self.num_of_samples / 300 * 100)
             self.labelProgress.configure(text="Progres: " + str(percentage) + "%")
         except :

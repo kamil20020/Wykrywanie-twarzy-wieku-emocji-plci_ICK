@@ -2,13 +2,11 @@ import tkinter as tk
 from tkinter import * 
 from tkinter.ttk import *
 import os
-from utilityFunctions import changeOnHover
-from Camera import turnOn
+from utilityFunctions import changeOnHover, load_users
 
 class MainMenu(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="white")
-        
         
         logoMainMenuImage = PhotoImage(file="./assets/logo128.png")
         addUserImage = PhotoImage(file="./assets/add-user64.png")
