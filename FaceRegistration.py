@@ -25,11 +25,16 @@ class FaceRegistration(tk.Frame):
         self.num_of_samples = 0
         self.progress = 0
         
-        self.labelProgress = tk.Label(self, text="Postęp: 0%", pady=5, font = fnt.Font(size = 14), bg="white")
+        self.camOffIndicator = tk.Label(self, height=2, width=4, bg="red", text="CAM\nOFF", fg="white")
+        self.camOffIndicator.place(x=575, y=25)
+        self.camOnIndicator = tk.Label(self, height=2, width=4, bg="#30572c", text="", fg="white")
+        self.camOnIndicator.place(x=575, y=65)
         
-        navButtonsFrame = tk.Frame(self, bg="white", pady=10)
+        self.labelProgress = tk.Label(self, text="Postęp: 0%", font = fnt.Font(size = 14), bg="white")
         
-        labellogoRegisterFace = tk.Label(self, text="Rejestracja twarzy", image=logoRegisterFaceImage, compound = TOP, pady=10, font = fnt.Font(size = 16), bg="white")
+        navButtonsFrame = tk.Frame(self, bg="white")
+        
+        labellogoRegisterFace = tk.Label(self, text="Rejestracja twarzy", image=logoRegisterFaceImage, compound = TOP, font = fnt.Font(size = 16), bg="white")
         labellogoRegisterFace.image = logoRegisterFaceImage
 
         labelRegisterFaceInfo = tk.Label(self, text="Spójrz prosto w kamerę przy optymalnym oświetleniu aby uzyskać jak najlepsze wyniki", bg="white")
@@ -44,11 +49,11 @@ class FaceRegistration(tk.Frame):
         self.registerFaceButton.pack(side='left', padx=50)
         changeOnHover(self.registerFaceButton, "#d1d1d1", "white")
 
-        labellogoRegisterFace.pack()
+        labellogoRegisterFace.pack(pady=10)
         labelRegisterFaceInfo.pack()
-        self.camera_image.pack(pady=20)
+        self.camera_image.pack(pady=10)
         self.labelProgress.pack()
-        navButtonsFrame.pack()
+        navButtonsFrame.pack(pady=20)
 
         #self.controller.num_of_images = x
     
@@ -57,12 +62,16 @@ class FaceRegistration(tk.Frame):
             return
 
         self.registerFaceButton["state"] = "disabled"
+        self.camOffIndicator.configure(text="", bg="#5e2727")
+        self.camOnIndicator.configure(text="CAM\nON", bg="#39852a", fg="white")
         turnOn()
         self.prepareRegister()
         self.registerSamples()
          
     def turnOffCamera(self):
         self.camera_image.configure(image=self.cameraOffPlaceholder500x350Image)
+        self.camOffIndicator.configure(text="CAM\nOFF", bg="red", fg="white")
+        self.camOnIndicator.configure(text="", bg="#30572c")
         turnOff()
         
     def prepareRegister(self):

@@ -27,6 +27,11 @@ class AddUser(tk.Frame):
         showPasswordImage = PhotoImage(file="./assets/show24.png")
         hidePasswordImage = PhotoImage(file="./assets/hide24.png")
 
+        camOffIndicator = tk.Label(self, height=2, width=4, bg="red", text="CAM\nOFF", fg="white")
+        camOffIndicator.place(x=575, y=25)
+        camOnIndicator = tk.Label(self, height=2, width=4, bg="#30572c", text="", fg="white")
+        camOnIndicator.place(x=575, y=65)
+
         #Logo for adding new user screen
         labellogoAddUser = tk.Label(self, text="Dodawanie użytkownika", image=logoAddUserImage, compound = TOP, pady=20, font = fnt.Font(size = 18), bg="white")
         labellogoAddUser.image = logoAddUserImage

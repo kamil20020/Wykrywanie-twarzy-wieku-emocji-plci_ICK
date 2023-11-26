@@ -5,6 +5,7 @@ from tkinter.ttk import *
 import tkinter.font as fnt
 import os
 from utilityFunctions import changeOnHover
+import utilityFunctions as uf
 
 
 class DetectHistory(tk.Frame):
@@ -12,11 +13,11 @@ class DetectHistory(tk.Frame):
         tk.Frame.__init__(self, parent, bg="white")
 
         def togglePasswordVisibility():
-            if entryPassword['show'] == '*':
-                entryPassword.config(show='')
+            if self.passwordEntry['show'] == '*':
+                self.passwordEntry.config(show='')
                 showHidePasswordButton.configure(image=hidePasswordImage)
             else:
-                entryPassword.config(show='*')
+                self.passwordEntry.config(show='*')
                 showHidePasswordButton.configure(image=showPasswordImage)
         
         logoHistoryImage = PhotoImage(file="./assets/history64.png")
@@ -25,42 +26,88 @@ class DetectHistory(tk.Frame):
         backButtonImage = PhotoImage(file="./assets/back64.png")
         confirmButtonImage = PhotoImage(file="./assets/confirm64.png")
 
-        labellogoHistory = tk.Label(self, text="Historia wykrywania", image=logoHistoryImage, compound = TOP, pady=20, font = fnt.Font(size = 12), bg="white")
+        camOffIndicator = tk.Label(self, height=2, width=4, bg="red", text="CAM\nOFF", fg="white")
+        camOffIndicator.place(x=575, y=25)
+        camOnIndicator = tk.Label(self, height=2, width=4, bg="#30572c", text="", fg="white")
+        camOnIndicator.place(x=575, y=65)
+
+        labellogoHistory = tk.Label(self, text="Historia wykrywania", image=logoHistoryImage, compound = TOP, pady=10, font = fnt.Font(size = 14), bg="white")
         labellogoHistory.image = logoHistoryImage
 
-        labelChooseUsername = tk.Label(self, text="Wybierz użytkownika: ", bg="white")
-        #Dropdown to choose user
-        users = ['Andrzej', 'Krzysztof', 'Paweł', 'Maciej']
-        variable = StringVar()
-        variable.set("Wybierz użytkownika")
-        chooseUserDropdown = ttk.OptionMenu(self, variable, *users) 
-        #chooseUserDropdown.config(width=30)
+        #Label for info if user has been sucessfully registe#d1d1d1 or not
+        self.labelRegistrationInfo = tk.Label(self, text="", bg="white")
 
-        labelTypePassword = tk.Label(self, text="Podaj hasło: ", bg="white")
-        entryPassword = ttk.Entry(self, show="*", textvariable="password")
-        showHidePasswordButton = tk.Button(self, image=showPasswordImage, bg="white", borderwidth=0, compound = TOP, pady = 10, cursor="hand2", command=togglePasswordVisibility)
+        registerInfoFrame = tk.Frame(self, bg="white", pady=5)
+        registerInputsFrame = tk.Frame(registerInfoFrame, bg="white", pady=5)
+        registerInputsFrame.pack(side='left')
+
+        #Username entry
+        usernameFrame = tk.Frame(registerInputsFrame, bg="white", pady=5)
+        usernameFrame.pack(anchor=tk.E)
+        labelUsername = tk.Label(usernameFrame, text="Podaj nazwę: ", bg="white").pack(side='left', padx=5)
+        self.usernameEntry = ttk.Entry(usernameFrame, textvariable="username")
+        self.usernameEntry.pack(side='right')
+
+        #Password entry
+        passwordFrame = tk.Frame(registerInputsFrame, bg="white", pady=5)
+        passwordFrame.pack(anchor=tk.E)
+        labelPassword = tk.Label(passwordFrame, text="Podaj hasło: ", bg="white").pack(side='left', padx=5)
+        self.passwordEntry = ttk.Entry(passwordFrame, show="*", textvariable="password")
+        self.passwordEntry.pack(side='left')
+
+        #Button to show and hide password
+        showHidePasswordButton = tk.Button(registerInfoFrame, image=showPasswordImage, bg="white", borderwidth=0, compound = TOP, pady = 10, cursor="hand2", command=togglePasswordVisibility)
         showHidePasswordButton.image = showPasswordImage
+        showHidePasswordButton.pack(side='left', padx=5, pady=7, anchor=tk.S)
         changeOnHover(showHidePasswordButton, "#d1d1d1", "white")
 
         historyTextPlaceholder = Text(self, height = 20, width = 50, bg = "white")
-        historyTextPlaceholder.insert('1.0', '10.11.2023 14:25 Maciej, smutny, mężczyzna, 39 lat18.02.2024 12:05 Tomasz, wesoły, mężczyzna, 21 lat')
+        historyTextPlaceholder.insert('1.0', '10.11.2023 14:25 Smutny, mężczyzna, 39 lat\n18.02.2024 12:05 Wesoły, mężczyzna, 21 lat')
         historyTextPlaceholder.config(state=DISABLED)
 
+        navButtonsFrame = tk.Frame(self, bg="white")
+
         # Button to go back to the main menu
-        backButton = tk.Button(self, text="Wstecz", image=backButtonImage, borderwidth=0, compound = TOP, bg="white", cursor="hand2", command=lambda: controller.show_frame("MainMenu"))
+        backButton = tk.Button(navButtonsFrame, text="Wstecz", image=backButtonImage, borderwidth=0, compound = TOP, bg="white", cursor="hand2", command=lambda: [controller.show_frame("MainMenu"), self.clearInputs()])
         backButton.image = backButtonImage
         changeOnHover(backButton, "#d1d1d1", "white")
-
-        confirmButton = tk.Button(self, text="Potwierdź", image=confirmButtonImage, borderwidth=0, compound = TOP, bg="white", cursor="hand2")
+        backButton.pack(side='left', padx=50)
+        
+        confirmButton = tk.Button(navButtonsFrame, text="Potwierdź", image=confirmButtonImage, borderwidth=0, compound = TOP, bg="white", cursor="hand2", command=lambda: self.authAndShowHistory())
         confirmButton.image = confirmButtonImage
         changeOnHover(confirmButton, "#d1d1d1", "white")
+        confirmButton.pack(side='left', padx=50)
 
         labellogoHistory.pack()
-        labelChooseUsername.pack()
-        chooseUserDropdown.pack()
-        labelTypePassword.pack()
-        entryPassword.pack()
+        self.labelRegistrationInfo.pack()
         showHidePasswordButton.pack()
-        historyTextPlaceholder.pack()
-        backButton.pack(side='left')
-        confirmButton.pack()
+        registerInfoFrame.pack()
+        historyTextPlaceholder.pack(pady=10)
+        navButtonsFrame.pack()
+        
+    
+    def authAndShowHistory(self):
+        if self.authenticate():
+            def showDetectHistory(self):
+                print("Tu bedzie funkcja na wyswietlenie historii w polu tekstowym")
+            self.labelRegistrationInfo.config(text="Historia wykrywania została wyświetlona", fg="green")
+        
+        
+    def authenticate(self):
+        username = self.usernameEntry.get()
+        password_hash = uf.hash_password(self.passwordEntry.get())
+
+        if uf.checkIfInputsEmpty(username) or uf.checkIfInputsEmpty(self.passwordEntry.get()):
+            self.labelRegistrationInfo.config(text="Proszę wypełnić wszystkie pola", fg="red")
+            return False
+        
+        if not uf.authenticate_user(username, password_hash):
+            self.labelRegistrationInfo.config(text="Podano nieprawidłowe dane", fg="red")
+            return False
+        
+        return True
+        
+    def clearInputs(self):
+        self.usernameEntry.delete(0, tk.END)
+        self.passwordEntry.delete(0, tk.END)
+        self.labelRegistrationInfo.config(text="")

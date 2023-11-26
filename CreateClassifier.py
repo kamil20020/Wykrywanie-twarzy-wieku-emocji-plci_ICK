@@ -28,9 +28,10 @@ def train_classifer(name):
 
     ids = np.array(ids)
 
-    print(ids)
+    #print(ids)
 
     #Train and save classifier
     clf = cv2.face.LBPHFaceRecognizer_create()
     clf.train(faces, ids)
     clf.write("./data/classifiers/"+name+"_classifier.xml")
+    

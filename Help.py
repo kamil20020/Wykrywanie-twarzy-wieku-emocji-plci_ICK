@@ -12,7 +12,12 @@ class Help(tk.Frame):
         logoHelpImage = PhotoImage(file="./assets/help64.png")
         backButtonImage = PhotoImage(file="./assets/back64.png")
 
-        labellogoHelp = tk.Label(self, text="Pomoc", image=logoHelpImage, compound = TOP, pady=20, font = fnt.Font(size = 12), bg="white")
+        camOffIndicator = tk.Label(self, height=2, width=4, bg="red", text="CAM\nOFF", fg="white")
+        camOffIndicator.place(x=575, y=25)
+        camOnIndicator = tk.Label(self, height=2, width=4, bg="#30572c", text="", fg="white")
+        camOnIndicator.place(x=575, y=65)
+
+        labellogoHelp = tk.Label(self, text="Pomoc", image=logoHelpImage, compound = TOP, pady=10, font = fnt.Font(size = 14), bg="white")
         labellogoHelp.image = logoHelpImage
 
         helpText = Text(self, height = 26, width = 60, bg = "white")
@@ -25,5 +30,5 @@ class Help(tk.Frame):
         changeOnHover(backButton, "#d1d1d1", "white")
 
         labellogoHelp.pack()
-        helpText.pack()
+        helpText.pack(pady=20)
         backButton.pack()

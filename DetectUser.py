@@ -9,7 +9,7 @@ from utilityFunctions import changeOnHover
 from Camera import turnOff, getFrame, turnOn, isOpened
 
 # Load the cascade
-face_cascade = cv2.CascadeClassifier('./assets/haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier('./data/haarcascade_frontalface_default.xml')
 
 class DetectUser(tk.Frame):
     def __init__(self, parent, controller):
@@ -21,17 +21,23 @@ class DetectUser(tk.Frame):
         self.cameraOffButtonImage = PhotoImage(file="./assets/cameraOff64.png")
         self.cameraOffPlaceholder500x350Image = PhotoImage(file="./assets/cameraOffPlaceholder500x350.png")
 
+        self.camOffIndicator = tk.Label(self, height=2, width=4, bg="red", text="CAM\nOFF", fg="white")
+        self.camOffIndicator.place(x=575, y=25)
+        self.camOnIndicator = tk.Label(self, height=2, width=4, bg="#30572c", text="", fg="white")
+        self.camOnIndicator.place(x=575, y=65)
+
         labellogoDetectUser = tk.Label(self, text="Wykrywanie użytkownika", image=logoDetectUserImage, compound = TOP, pady=10, font = fnt.Font(size = 10), bg="white")
         labellogoDetectUser.image = logoDetectUserImage
 
         self.camera_image = tk.Label(self, image=self.cameraOffPlaceholder500x350Image)
 
-        labelUserDetected = tk.Label(self, text="Pseudonim: ", bg="white")
-        labelGenderDetected = tk.Label(self, text="Płeć: ", bg="white")
-        labelAgeDetected = tk.Label(self, text="Wiek: ", bg="white")
-        labelEmotionsDetected = tk.Label(self, text="Emocje: ", bg="white")
+        labelsFrame = tk.Frame(self, bg="white")
+        labelUserDetected = tk.Label(labelsFrame, text="Pseudonim: Dareczek", bg="white").pack(anchor=tk.W)
+        labelGenderDetected = tk.Label(labelsFrame, text="Płeć: Mezczyzna", bg="white").pack(anchor=tk.W)
+        labelAgeDetected = tk.Label(labelsFrame, text="Wiek: 21", bg="white").pack(anchor=tk.W)
+        labelEmotionsDetected = tk.Label(labelsFrame, text="Emocje: smutny", bg="white").pack(anchor=tk.W)
 
-        navButtonsFrame = tk.Frame(self, bg="white", pady=10)
+        navButtonsFrame = tk.Frame(self, bg="white")
         
         # Button to go back to the main menu
         backButton = tk.Button(navButtonsFrame, text="Wstecz", image=backButtonImage, borderwidth=0, compound = TOP, bg="white", cursor="hand2", command=lambda: [controller.show_frame("MainMenu"), self.turnOffCamera()])
@@ -46,15 +52,14 @@ class DetectUser(tk.Frame):
 
         labellogoDetectUser.pack()
         self.camera_image.pack()
-        labelUserDetected.pack()
-        labelGenderDetected.pack()
-        labelAgeDetected.pack()
-        labelEmotionsDetected.pack()
-        navButtonsFrame.pack()
+        labelsFrame.pack(pady=10)
+        navButtonsFrame.pack(pady=10)
 
     def turnOffCamera(self):
         self.toggleCameraButton.configure(image=self.cameraOnButtonImage, text="Włącz kamerę")
         self.camera_image.configure(image=self.cameraOffPlaceholder500x350Image)
+        self.camOffIndicator.configure(text="CAM\nOFF", bg="red", fg="white")
+        self.camOnIndicator.configure(text="", bg="#30572c")
         turnOff()
         
     def toggleCamera(self):
@@ -62,11 +67,16 @@ class DetectUser(tk.Frame):
         if not isOpened():
            self.toggleCameraButton.configure(image=self.cameraOffButtonImage, text="Wyłącz kamerę")
            self.setupCameraForDetection()
+           self.camOffIndicator.configure(text="", bg="#5e2727")
+           self.camOnIndicator.configure(text="CAM\nON", bg="#39852a", fg="white")
            
         else:
            self.toggleCameraButton.configure(image=self.cameraOnButtonImage, text="Włącz kamerę")
            self.camera_image.configure(image=self.cameraOffPlaceholder500x350Image)
+           self.camOffIndicator.configure(text="CAM\nOFF", bg="red", fg="white")
+           self.camOnIndicator.configure(text="", bg="#30572c")
            turnOff()
+
 
     def setupCameraForDetection(self):
         turnOn()

@@ -28,6 +28,10 @@ class CalibrateUser(tk.Frame):
         trainModelImage = PhotoImage(file="./assets/train64.png")
         backButtonImage = PhotoImage(file="./assets/back64.png")
 
+        camOffIndicator = tk.Label(self, height=2, width=4, bg="red", text="CAM\nOFF", fg="white")
+        camOffIndicator.place(x=575, y=25)
+        camOnIndicator = tk.Label(self, height=2, width=4, bg="#30572c", text="", fg="white")
+        camOnIndicator.place(x=575, y=65)
 
         labellogoCalibrateUser = tk.Label(self, text="Kalibracja użytkownika", image=logoCalibrateImage, compound = TOP, pady=20, font = fnt.Font(size = 18), bg="white")
         labellogoCalibrateUser.image = logoCalibrateImage
@@ -75,14 +79,14 @@ class CalibrateUser(tk.Frame):
 
         
         # Button to go back to the main menu
-        backButton = tk.Button(self, text="Wstecz", image=backButtonImage, borderwidth=0, compound = TOP, bg="white", cursor="hand2", command=lambda: controller.show_frame("MainMenu"))
+        backButton = tk.Button(self, text="Wstecz", image=backButtonImage, borderwidth=0, compound = TOP, bg="white", cursor="hand2", command=lambda: [controller.show_frame("MainMenu"), self.clearInputs()])
         backButton.image = backButtonImage
         uf.changeOnHover(backButton, "#d1d1d1", "white")
 
         
         labellogoCalibrateUser.pack()
         self.labelRegistrationInfo.pack(pady=10)
-        registerInfoFrame.pack(pady=20)
+        registerInfoFrame.pack(pady=15)
         utilButtonsFrame.pack(pady=30)
         backButton.pack(pady=30)
 
@@ -117,3 +121,8 @@ class CalibrateUser(tk.Frame):
             else:
                 train_classifer(loggedUser)
                 self.labelRegistrationInfo.config(text="Wytrenowano model", fg="green")
+                
+    def clearInputs(self):
+        self.usernameEntry.delete(0, tk.END)
+        self.passwordEntry.delete(0, tk.END)
+        self.labelRegistrationInfo.config(text="")
