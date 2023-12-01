@@ -5,11 +5,14 @@ import tkinter.font as fnt
 from PIL import Image, ImageTk 
 import cv2
 import os
-from utilityFunctions import changeOnHover
+from utilityFunctions import changeOnHover, load_users, checkIfUserDirExist
 from Camera import turnOff, getFrame, turnOn, isOpened
+from RecognitionClassifier import clf as recognition_classifier
 
 # Load the cascade
 face_cascade = cv2.CascadeClassifier('./data/haarcascade_frontalface_default.xml')
+
+all_users = load_users()
 
 class DetectUser(tk.Frame):
     def __init__(self, parent, controller):
@@ -31,11 +34,11 @@ class DetectUser(tk.Frame):
 
         self.camera_image = tk.Label(self, image=self.cameraOffPlaceholder500x350Image)
 
-        labelsFrame = tk.Frame(self, bg="white")
-        labelUserDetected = tk.Label(labelsFrame, text="Pseudonim: Dareczek", bg="white").pack(anchor=tk.W)
-        labelGenderDetected = tk.Label(labelsFrame, text="Płeć: Mezczyzna", bg="white").pack(anchor=tk.W)
-        labelAgeDetected = tk.Label(labelsFrame, text="Wiek: 21", bg="white").pack(anchor=tk.W)
-        labelEmotionsDetected = tk.Label(labelsFrame, text="Emocje: smutny", bg="white").pack(anchor=tk.W)
+        # labelsFrame = tk.Frame(self, bg="white")
+        # self.labelUserDetected = tk.Label(labelsFrame, text="Pseudonim: nie wykryto", bg="white", fg="red").pack(anchor=tk.W)
+        # self.labelGenderDetected = tk.Label(labelsFrame, text="Płeć: nie wykryto", bg="white", fg="red").pack(anchor=tk.W)
+        # self.labelAgeDetected = tk.Label(labelsFrame, text="Wiek: nie wykryto", bg="white", fg="red").pack(anchor=tk.W)
+        # self.labelEmotionsDetected = tk.Label(labelsFrame, text="Emocje: nie wykryto", bg="white", fg="red").pack(anchor=tk.W)
 
         navButtonsFrame = tk.Frame(self, bg="white")
         
@@ -52,7 +55,7 @@ class DetectUser(tk.Frame):
 
         labellogoDetectUser.pack()
         self.camera_image.pack()
-        labelsFrame.pack(pady=10)
+        # labelsFrame.pack(pady=10)
         navButtonsFrame.pack(pady=10)
 
     def turnOffCamera(self):
@@ -94,12 +97,42 @@ class DetectUser(tk.Frame):
 
         # Detect the faces
         faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+        fontType = cv2.FONT_HERSHEY_SIMPLEX
+        fontSize = 0.4
+        
+        # if len(faces) == 0:
+        #     self.labelUserDetected.configure(text="Pseudonim: nie wykryto")
+        #     self.labelGenderDetected.configure(text="Płeć: nie wykryto")
+        #     self.labelAgeDetected.configure(text="Wiek: nie wykryto")
+        #     self.labelEmotionsDetected.configure(text="Emocje: nie wykryto")
 
         # Draw the rectangle around each face
-        for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
 
-        opencv_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA) 
+        for (x, y, w, h) in faces:
+
+            face = gray[y:y+h,x:x+w]
+
+            desc = '21 lat, Mezczyzna, Smutny'
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
+            cv2.putText(frame, desc, (x, y + h + 12), fontType, fontSize, (0, 0, 255), 1, cv2.LINE_AA)
+            
+            for user in all_users:
+                
+                if not checkIfUserDirExist(user):
+                    continue
+
+                _, confidence = recognition_classifier.predict(face)
+                confidence = 100 - int(confidence)
+
+                print("Confidence: " + str(confidence) + " %")
+                
+                if confidence > 50:
+                    title = user
+                    cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                    cv2.putText(frame, title, (x, y-4), fontType, fontSize, (0, 255, 0), 1, cv2.LINE_AA)
+                    cv2.putText(frame, desc, (x, y + h + 12), fontType, fontSize, (0, 255, 0), 1, cv2.LINE_AA)
+
+        opencv_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
   
         # Capture the latest frame and transform to image 
         captured_image = Image.fromarray(opencv_image)

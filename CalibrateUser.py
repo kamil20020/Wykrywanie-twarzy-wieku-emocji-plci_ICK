@@ -5,7 +5,7 @@ from tkinter.ttk import *
 import tkinter.font as fnt
 import os
 import utilityFunctions as uf
-from CreateClassifier import train_classifer
+from RecognitionClassifier import train_classifer as train_recognition_classifer
 
 class CalibrateUser(tk.Frame):
     def __init__(self, parent, controller):
@@ -119,7 +119,7 @@ class CalibrateUser(tk.Frame):
             if not uf.checkIfUserDirExist(loggedUser):
                 self.labelRegistrationInfo.config(text="Przed trenowaniem modelu należy zarejestrować twarz", fg="red")
             else:
-                train_classifer(loggedUser)
+                train_recognition_classifer()
                 self.labelRegistrationInfo.config(text="Wytrenowano model", fg="green")
                 
     def clearInputs(self):

@@ -7,7 +7,6 @@ import cv2
 from utilityFunctions import changeOnHover
 from Camera import turnOn, turnOff, getFrame, isOpened
 from DetectUser import face_cascade
-from CreateClassifier import train_classifer
 from tkinter import messagebox
 
 class FaceRegistration(tk.Frame):
@@ -110,15 +109,16 @@ class FaceRegistration(tk.Frame):
             face = frame[y:y+h, x:x+w].copy()
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-        try :
-            self.num_of_samples += 1
-            cv2.imwrite("./data/" + self.controller.loggedUser + "/" + str(self.num_of_samples) + self.controller.loggedUser + ".jpg", face)
-            
-            percentage = round(self.num_of_samples / 300 * 100)
-            self.labelProgress.configure(text="Progres: " + str(percentage) + "%")
-        except :
-            print("Could not create img")
+            try :
+                self.num_of_samples += 1
+                cv2.imwrite("./data/" + self.controller.loggedUser + "/" + str(self.num_of_samples) + self.controller.loggedUser + ".jpg", face)
+                
+                percentage = round(self.num_of_samples / 300 * 100)
+                self.labelProgress.configure(text="Progres: " + str(percentage) + "%")
+            except :
+                print("Could not create img")
 
+            break
         
         opencv_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA) 
   
