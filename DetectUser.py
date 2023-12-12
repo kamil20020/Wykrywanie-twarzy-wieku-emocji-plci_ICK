@@ -5,12 +5,17 @@ import tkinter.font as fnt
 from PIL import Image, ImageTk 
 import cv2
 import os
-from utilityFunctions import changeOnHover, load_users, checkIfUserDirExist
+from utilityFunctions import changeOnHover, load_users, getUsername
 from Camera import turnOff, getFrame, turnOn, isOpened
 from RecognitionClassifier import clf as recognition_classifier
+import predictions
 
+
+#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' #ignore error
 # Load the cascade
 face_cascade = cv2.CascadeClassifier('./data/haarcascade_frontalface_default.xml')
+
+#Import labela emocji z klasy predictions (nie testowane)
 
 all_users = load_users()
 
@@ -94,9 +99,10 @@ class DetectUser(tk.Frame):
 
         # Convert into grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        bgr = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Detect the faces
-        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+        faces = face_cascade.detectMultiScale(gray, 2, 5)
         fontType = cv2.FONT_HERSHEY_SIMPLEX
         fontSize = 0.4
         
@@ -111,26 +117,28 @@ class DetectUser(tk.Frame):
         for (x, y, w, h) in faces:
 
             face = gray[y:y+h,x:x+w]
+            colored_face = bgr[y:y+h,x:x+w]
 
-            desc = '21 lat, Mezczyzna, Smutny'
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
-            cv2.putText(frame, desc, (x, y + h + 12), fontType, fontSize, (0, 0, 255), 1, cv2.LINE_AA)
-            
-            for user in all_users:
-                
-                if not checkIfUserDirExist(user):
-                    continue
+            age = predictions.age(colored_face)
+            gender = predictions.gender(colored_face)
+            emotion = predictions.emotion(face)
 
-                _, confidence = recognition_classifier.predict(face)
-                confidence = 100 - int(confidence)
+            label, confidence = recognition_classifier.predict(face)
+            confidence = 100 - confidence
+            user = getUsername(label)
 
-                print("Confidence: " + str(confidence) + " %")
-                
-                if confidence > 50:
-                    title = user
-                    cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-                    cv2.putText(frame, title, (x, y-4), fontType, fontSize, (0, 255, 0), 1, cv2.LINE_AA)
-                    cv2.putText(frame, desc, (x, y + h + 12), fontType, fontSize, (0, 255, 0), 1, cv2.LINE_AA)
+            print(str(user) + " Confidence: " + str(confidence) + " %")
+
+            desc = emotion+", "+gender+", "+age #'21 lat, Mezczyzna, Smutny'
+
+            if confidence > 50:
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                cv2.putText(frame, user, (x, y-4), fontType, fontSize, (0, 255, 0), 1, cv2.LINE_AA)
+                cv2.putText(frame, desc, (x, y + h + 12), fontType, fontSize, (0, 255, 0), 1, cv2.LINE_AA)
+            else:
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
+                cv2.putText(frame, "Niezarejestrowany", (x, y-4), fontType, fontSize, (0, 0, 255), 1, cv2.LINE_AA)
+                cv2.putText(frame, desc, (x, y + h + 12), fontType, fontSize, (0, 0, 255), 1, cv2.LINE_AA)
 
         opencv_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
   

@@ -23,11 +23,9 @@ def train_classifer():
         users_dirs = dirs
         break
 
-    for i in range(len(users_dirs)):
+    for user_id in users_dirs:
 
-        user = users_dirs[i]
-
-        user_dir_path = os.path.join(path, user)
+        user_dir_path = os.path.join(path, user_id)
 
         pictures = []
 
@@ -39,8 +37,7 @@ def train_classifer():
             img = Image.open(imgpath).convert('L')
             imageNp = np.array(img, 'uint8')
             faces.append(imageNp)
-            labels.append(i)
-
+            labels.append(int(user_id))
 
     labelsNp = np.array(labels)
 

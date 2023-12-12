@@ -75,7 +75,9 @@ class FaceRegistration(tk.Frame):
         
     def prepareRegister(self):
         try:
-            os.makedirs("./data/" + self.controller.loggedUser)
+            print(self.controller.loggedUser)
+            print("./data/" + str(self.controller.loggedUser[1]))
+            os.makedirs("./data/" + str(self.controller.loggedUser[1]))
         except:
             print('Directory Already Created')
 
@@ -100,9 +102,7 @@ class FaceRegistration(tk.Frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # Detect the faces
-        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
-
-        face = None
+        faces = face_cascade.detectMultiScale(gray, 1.1, 5)
 
         # Draw the rectangle around each face
         for (x, y, w, h) in faces:
@@ -111,7 +111,9 @@ class FaceRegistration(tk.Frame):
 
             try :
                 self.num_of_samples += 1
-                cv2.imwrite("./data/" + self.controller.loggedUser + "/" + str(self.num_of_samples) + self.controller.loggedUser + ".jpg", face)
+                face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+                print("./data/" + self.controller.loggedUser[1] + "/" + str(self.num_of_samples) + self.controller.loggedUser[0] + ".jpg")
+                cv2.imwrite("./data/" + self.controller.loggedUser[1] + "/" + str(self.num_of_samples) + self.controller.loggedUser[0] + ".jpg", face)
                 
                 percentage = round(self.num_of_samples / 300 * 100)
                 self.labelProgress.configure(text="Progres: " + str(percentage) + "%")

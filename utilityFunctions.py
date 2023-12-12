@@ -24,7 +24,16 @@ def load_users():
             users.append(username)
 
     return users
+
+def getUsername(given_id):
+    with open('pwd', 'r') as file:
+        for line in file:
+            stored_username, _, id = line.strip().split(':')
+            if str(given_id) == id:
+                return stored_username
     
+    return ""
+            
 def hash_password(password):
     # Hash the password using a secure hashing algorithm
     # hashlib.sha256 is used in this example
@@ -33,15 +42,15 @@ def hash_password(password):
 
 def append_user(username, password_hash):
     with open('pwd', 'a') as file:
-        file.write(f"{username}:{password_hash}\n")
+        file.write(f"{username}:{password_hash}:{len(load_users()) + 1}\n")
      
 def authenticate_user(username, password_hash):
     with open('pwd', 'r') as file:
         for line in file:
-            stored_username, stored_password = line.strip().split(':')
+            stored_username, stored_password, id = line.strip().split(':')
             if username == stored_username and password_hash == stored_password:
-                return True
-    return False
+                return [stored_username, id]
+    return None
 
 def compare_passwords(p1, p2):
     return p1 == p2

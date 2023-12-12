@@ -98,25 +98,26 @@ class CalibrateUser(tk.Frame):
             self.labelRegistrationInfo.config(text="Proszę wypełnić wszystkie pola", fg="red")
             return False
         
-        if not uf.authenticate_user(username, password_hash):
+        logged_user = uf.authenticate_user(username, password_hash)
+        
+        if logged_user is None:
             self.labelRegistrationInfo.config(text="Podano nieprawidłowe dane", fg="red")
             return False
         
+        self.controller.loggedUser = logged_user
+
         return True
         
     def moveToFaceRegisteration(self):
 
         if self.authenticate():
-            self.controller.loggedUser = self.usernameEntry.get()
             self.controller.show_frame("FaceRegistration")
         
     def trainModel(self):
 
         if self.authenticate():
-
-            loggedUser = self.usernameEntry.get()
             
-            if not uf.checkIfUserDirExist(loggedUser):
+            if not uf.checkIfUserDirExist(self.controller.loggedUser[1]):
                 self.labelRegistrationInfo.config(text="Przed trenowaniem modelu należy zarejestrować twarz", fg="red")
             else:
                 train_recognition_classifer()
