@@ -1,6 +1,7 @@
 import cv2
 import hashlib
 import os
+from datetime import datetime
 
 # function to change properties of button on hover
 def changeOnHover(button, colorOnHover, colorOnLeave):
@@ -51,6 +52,22 @@ def authenticate_user(username, password_hash):
             if username == stored_username and password_hash == stored_password:
                 return [stored_username, id]
     return None
+
+def writeToHistory(user, emotion, gender, age):
+    with open('history', 'r+') as file:
+        now = datetime.now()
+        current_date_time = now.strftime("%H:%M %d/%m/%Y") #:%S # data i czas z zegara komputerowego, nie potrzeba internetu
+        
+        lines = file.readlines()
+        file.seek(0)
+        line_exists = any(current_date_time in line for line in lines)# check if user already have saved result in certain hour in a day (ONE RECORD PER ONE HOUR)
+        
+        if not line_exists:
+            file.write(f"{user}, {emotion}, {age} lat, {gender}, {current_date_time}\n") # add the new line
+            print(f"Data added for {current_date_time}")
+        else:
+            print(f"Data already exists for this minute")
+        file.writelines(lines)
 
 def compare_passwords(p1, p2):
     return p1 == p2

@@ -5,7 +5,7 @@ import tkinter.font as fnt
 from PIL import Image, ImageTk 
 import cv2
 import os
-from utilityFunctions import changeOnHover, load_users, getUsername
+from utilityFunctions import changeOnHover, load_users, getUsername, writeToHistory
 from Camera import turnOff, getFrame, turnOn, isOpened
 from RecognitionClassifier import clf as recognition_classifier
 import predictions
@@ -61,7 +61,7 @@ class DetectUser(tk.Frame):
         labellogoDetectUser.pack()
         self.camera_image.pack()
         # labelsFrame.pack(pady=10)
-        navButtonsFrame.pack(pady=10)
+        navButtonsFrame.pack(pady=50)
 
     def turnOffCamera(self):
         self.toggleCameraButton.configure(image=self.cameraOnButtonImage, text="Włącz kamerę")
@@ -123,18 +123,26 @@ class DetectUser(tk.Frame):
             gender = predictions.gender(colored_face)
             emotion = predictions.emotion(face)
 
-            label, confidence = recognition_classifier.predict(face)
-            confidence = 100 - confidence
-            user = getUsername(label)
-
-            print(str(user) + " Confidence: " + str(confidence) + " %")
-
             desc = emotion+", "+gender+", "+age #'21 lat, Mezczyzna, Smutny'
 
-            if confidence > 50:
-                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-                cv2.putText(frame, user, (x, y-4), fontType, fontSize, (0, 255, 0), 1, cv2.LINE_AA)
-                cv2.putText(frame, desc, (x, y + h + 12), fontType, fontSize, (0, 255, 0), 1, cv2.LINE_AA)
+            if os.path.exists("./data/recognition-classifier.xml"):
+
+                label, confidence = recognition_classifier.predict(face)
+                confidence = 100 - confidence
+                user = getUsername(label)
+
+                print(str(user) + " Confidence: " + str(confidence) + " %")
+
+                if confidence > 50:
+                    cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                    cv2.putText(frame, user, (x, y-4), fontType, fontSize, (0, 255, 0), 1, cv2.LINE_AA)
+                    cv2.putText(frame, desc, (x, y + h + 12), fontType, fontSize, (0, 255, 0), 1, cv2.LINE_AA)
+                    writeToHistory(user, emotion, gender, age)
+                    
+                else:
+                    cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
+                    cv2.putText(frame, "Niezarejestrowany", (x, y-4), fontType, fontSize, (0, 0, 255), 1, cv2.LINE_AA)
+                    cv2.putText(frame, desc, (x, y + h + 12), fontType, fontSize, (0, 0, 255), 1, cv2.LINE_AA)
             else:
                 cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
                 cv2.putText(frame, "Niezarejestrowany", (x, y-4), fontType, fontSize, (0, 0, 255), 1, cv2.LINE_AA)

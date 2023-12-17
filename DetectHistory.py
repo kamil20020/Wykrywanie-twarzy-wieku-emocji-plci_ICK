@@ -15,13 +15,13 @@ class DetectHistory(tk.Frame):
         def togglePasswordVisibility():
             if self.passwordEntry['show'] == '*':
                 self.passwordEntry.config(show='')
-                showHidePasswordButton.configure(image=hidePasswordImage)
+                self.showHidePasswordButton.configure(image=hidePasswordImage)
             else:
                 self.passwordEntry.config(show='*')
-                showHidePasswordButton.configure(image=showPasswordImage)
+                self.showHidePasswordButton.configure(image=self.showPasswordImage)
         
         logoHistoryImage = PhotoImage(file="./assets/history64.png")
-        showPasswordImage = PhotoImage(file="./assets/show24.png")
+        self.showPasswordImage = PhotoImage(file="./assets/show24.png")
         hidePasswordImage = PhotoImage(file="./assets/hide24.png")
         backButtonImage = PhotoImage(file="./assets/back64.png")
         confirmButtonImage = PhotoImage(file="./assets/confirm64.png")
@@ -56,14 +56,22 @@ class DetectHistory(tk.Frame):
         self.passwordEntry.pack(side='left')
 
         #Button to show and hide password
-        showHidePasswordButton = tk.Button(registerInfoFrame, image=showPasswordImage, bg="white", borderwidth=0, compound = TOP, pady = 10, cursor="hand2", command=togglePasswordVisibility)
-        showHidePasswordButton.image = showPasswordImage
-        showHidePasswordButton.pack(side='left', padx=5, pady=7, anchor=tk.S)
-        changeOnHover(showHidePasswordButton, "#d1d1d1", "white")
+        self.showHidePasswordButton = tk.Button(registerInfoFrame, image=self.showPasswordImage, bg="white", borderwidth=0, compound = TOP, pady = 10, cursor="hand2", command=togglePasswordVisibility)
+        self.showHidePasswordButton.image = self.showPasswordImage
+        self.showHidePasswordButton.pack(side='left', padx=5, pady=7, anchor=tk.S)
+        changeOnHover(self.showHidePasswordButton, "#d1d1d1", "white")
 
-        historyTextPlaceholder = Text(self, height = 20, width = 50, bg = "white")
-        historyTextPlaceholder.insert('1.0', '10.11.2023 14:25 Smutny, mężczyzna, 39 lat\n18.02.2024 12:05 Wesoły, mężczyzna, 21 lat')
-        historyTextPlaceholder.config(state=DISABLED)
+
+
+        textPlaceholderBox = tk.Frame(self, bg="white")
+
+        self.historyTextPlaceholder = Text(textPlaceholderBox, height = 20, width = 65, bg = "white", wrap="none")
+        self.historyTextPlaceholder.pack(side='left')
+        
+        scrollbar = tk.Scrollbar(textPlaceholderBox, orient='vertical', command=self.historyTextPlaceholder.yview)
+        scrollbar.pack(side='left', fill=tk.Y)
+        self.historyTextPlaceholder['yscrollcommand'] = scrollbar.set
+
 
         navButtonsFrame = tk.Frame(self, bg="white")
 
@@ -80,18 +88,18 @@ class DetectHistory(tk.Frame):
 
         labellogoHistory.pack()
         self.labelRegistrationInfo.pack()
-        showHidePasswordButton.pack()
+        self.showHidePasswordButton.pack()
         registerInfoFrame.pack()
-        historyTextPlaceholder.pack(pady=10)
+        textPlaceholderBox.pack(pady=10)
         navButtonsFrame.pack()
         
+        
+      
     
     def authAndShowHistory(self):
         if self.authenticate():
-            def showDetectHistory(self):
-                print("Tu bedzie funkcja na wyswietlenie historii w polu tekstowym")
+            self.showHistory()
             self.labelRegistrationInfo.config(text="Historia wykrywania została wyświetlona", fg="green")
-        
         
     def authenticate(self):
         username = self.usernameEntry.get()
@@ -106,8 +114,28 @@ class DetectHistory(tk.Frame):
             return False
         
         return True
-        
+    
+    def showHistory(self):
+        self.historyTextPlaceholder.delete('1.0', END)
+        currentUser = self.usernameEntry.get()  
+        foundResults = []
+
+        with open('history', 'r') as file:
+            for line in file:
+                if currentUser in line:
+                    foundResults.append(line.strip())
+
+        if foundResults:
+            for found_line in foundResults:
+                self.historyTextPlaceholder.insert('1.0', f"{found_line}\n") 
+        else:
+            self.historyTextPlaceholder.insert('1.0', 'Brak historii wykrywania dla tego użytkownika!')  
+        #self.historyTextPlaceholder.config(state=DISABLED) #ODKOMENTOWAC
+    
     def clearInputs(self):
         self.usernameEntry.delete(0, tk.END)
         self.passwordEntry.delete(0, tk.END)
         self.labelRegistrationInfo.config(text="")
+        self.historyTextPlaceholder.delete('1.0', END)
+        self.passwordEntry.config(show='*')
+        self.showHidePasswordButton.configure(image=self.showPasswordImage)

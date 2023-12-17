@@ -14,17 +14,17 @@ class AddUser(tk.Frame):
             if self.passwordEntry['show'] == '*':
                 self.passwordEntry.config(show='')
                 self.passwordAgainEntry.config(show='')
-                showHidePasswordButton.configure(image=hidePasswordImage)
+                self.showHidePasswordButton.configure(image=hidePasswordImage)
             else:
                 self.passwordEntry.config(show='*')
                 self.passwordAgainEntry.config(show='*')
-                showHidePasswordButton.configure(image=showPasswordImage)
+                self.showHidePasswordButton.configure(image=self.showPasswordImage)
 
 
         logoAddUserImage = PhotoImage(file="./assets/add-user128.png")
         backButtonImage = PhotoImage(file="./assets/back64.png")
         confirmButtonImage = PhotoImage(file="./assets/confirm64.png")
-        showPasswordImage = PhotoImage(file="./assets/show24.png")
+        self.showPasswordImage = PhotoImage(file="./assets/show24.png")
         hidePasswordImage = PhotoImage(file="./assets/hide24.png")
 
         camOffIndicator = tk.Label(self, height=2, width=4, bg="red", text="CAM\nOFF", fg="white")
@@ -58,10 +58,10 @@ class AddUser(tk.Frame):
         self.passwordEntry.pack(side='left')
 
         #Button to show and hide password
-        showHidePasswordButton = tk.Button(registerInfoFrame, image=showPasswordImage, bg="white", borderwidth=0, compound = TOP, pady = 10, cursor="hand2", command=togglePasswordVisibility)
-        showHidePasswordButton.image = showPasswordImage
-        showHidePasswordButton.pack(side='left', padx=5)
-        uf.changeOnHover(showHidePasswordButton, "#d1d1d1", "white")
+        self.showHidePasswordButton = tk.Button(registerInfoFrame, image=self.showPasswordImage, bg="white", borderwidth=0, compound = TOP, pady = 10, cursor="hand2", command=togglePasswordVisibility)
+        self.showHidePasswordButton.image = self.showPasswordImage
+        self.showHidePasswordButton.pack(side='left', padx=5)
+        uf.changeOnHover(self.showHidePasswordButton, "#d1d1d1", "white")
 
         #Password again entry
         passwordAgainFrame = tk.Frame(registerInputsFrame, bg="white", pady=5)
@@ -118,6 +118,9 @@ class AddUser(tk.Frame):
         self.passwordEntry.delete(0, tk.END)
         self.passwordAgainEntry.delete(0, tk.END)
         self.labelRegistrationInfo.config(text="")
+        self.passwordEntry.config(show='*')
+        self.passwordAgainEntry.config(show='*')
+        self.showHidePasswordButton.configure(image=self.showPasswordImage)
         
 
 

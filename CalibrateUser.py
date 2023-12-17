@@ -16,13 +16,13 @@ class CalibrateUser(tk.Frame):
         def togglePasswordVisibility():
             if self.passwordEntry['show'] == '*':
                 self.passwordEntry.config(show='')
-                showHidePasswordButton.configure(image=hidePasswordImage)
+                self.showHidePasswordButton.configure(image=hidePasswordImage)
             else:
                 self.passwordEntry.config(show='*')
-                showHidePasswordButton.configure(image=showPasswordImage)
+                self.showHidePasswordButton.configure(image=self.showPasswordImage)
 
         logoCalibrateImage = PhotoImage(file="./assets/calibrate128.png")
-        showPasswordImage = PhotoImage(file="./assets/show24.png")
+        self.showPasswordImage = PhotoImage(file="./assets/show24.png")
         hidePasswordImage = PhotoImage(file="./assets/hide24.png")
         registerFaceImage = PhotoImage(file="./assets/faceRegister64.png")
         trainModelImage = PhotoImage(file="./assets/train64.png")
@@ -58,10 +58,10 @@ class CalibrateUser(tk.Frame):
         self.passwordEntry.pack(side='left')
 
         #Button to show and hide password
-        showHidePasswordButton = tk.Button(registerInfoFrame, image=showPasswordImage, bg="white", borderwidth=0, compound = TOP, pady = 10, cursor="hand2", command=togglePasswordVisibility)
-        showHidePasswordButton.image = showPasswordImage
-        showHidePasswordButton.pack(side='left', padx=5, pady=7, anchor=tk.S)
-        uf.changeOnHover(showHidePasswordButton, "#d1d1d1", "white")
+        self.showHidePasswordButton = tk.Button(registerInfoFrame, image=self.showPasswordImage, bg="white", borderwidth=0, compound = TOP, pady = 10, cursor="hand2", command=togglePasswordVisibility)
+        self.showHidePasswordButton.image = self.showPasswordImage
+        self.showHidePasswordButton.pack(side='left', padx=5, pady=7, anchor=tk.S)
+        uf.changeOnHover(self.showHidePasswordButton, "#d1d1d1", "white")
 
         utilButtonsFrame = tk.Frame(self, bg="white")
 
@@ -127,3 +127,5 @@ class CalibrateUser(tk.Frame):
         self.usernameEntry.delete(0, tk.END)
         self.passwordEntry.delete(0, tk.END)
         self.labelRegistrationInfo.config(text="")
+        self.passwordEntry.config(show='*')
+        self.showHidePasswordButton.configure(image=self.showPasswordImage)
