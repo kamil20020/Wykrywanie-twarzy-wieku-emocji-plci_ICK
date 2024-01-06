@@ -102,7 +102,7 @@ class DetectUser(tk.Frame):
         bgr = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Detect the faces
-        faces = face_cascade.detectMultiScale(gray, 2, 5)
+        faces = face_cascade.detectMultiScale(gray, 2.4, 5) #SCALE FACTOR NA 2.4 LUB 2.5 JEST BARDZO DOBRY ALE INNE MOCNO POGARSZAJA WYKRYWANIE UZYTKOWNIKA ----------- minNeighbours mozna sie pobawic gdy na ekranie jest wiecej niz 1 twarz
         fontType = cv2.FONT_HERSHEY_SIMPLEX
         fontSize = 0.4
         

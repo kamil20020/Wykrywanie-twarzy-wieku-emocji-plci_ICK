@@ -15,14 +15,14 @@ class DetectHistory(tk.Frame):
         def togglePasswordVisibility():
             if self.passwordEntry['show'] == '*':
                 self.passwordEntry.config(show='')
-                self.showHidePasswordButton.configure(image=hidePasswordImage)
+                self.showHidePasswordButton.configure(image=self.showPasswordImage)
             else:
                 self.passwordEntry.config(show='*')
-                self.showHidePasswordButton.configure(image=self.showPasswordImage)
+                self.showHidePasswordButton.configure(image=self.hidePasswordImage)
         
         logoHistoryImage = PhotoImage(file="./assets/history64.png")
         self.showPasswordImage = PhotoImage(file="./assets/show24.png")
-        hidePasswordImage = PhotoImage(file="./assets/hide24.png")
+        self.hidePasswordImage = PhotoImage(file="./assets/hide24.png")
         backButtonImage = PhotoImage(file="./assets/back64.png")
         confirmButtonImage = PhotoImage(file="./assets/confirm64.png")
 
@@ -56,8 +56,8 @@ class DetectHistory(tk.Frame):
         self.passwordEntry.pack(side='left')
 
         #Button to show and hide password
-        self.showHidePasswordButton = tk.Button(registerInfoFrame, image=self.showPasswordImage, bg="white", borderwidth=0, compound = TOP, pady = 10, cursor="hand2", command=togglePasswordVisibility)
-        self.showHidePasswordButton.image = self.showPasswordImage
+        self.showHidePasswordButton = tk.Button(registerInfoFrame, image=self.hidePasswordImage, bg="white", borderwidth=0, compound = TOP, pady = 10, cursor="hand2", command=togglePasswordVisibility)
+        self.showHidePasswordButton.image = self.hidePasswordImage
         self.showHidePasswordButton.pack(side='left', padx=5, pady=7, anchor=tk.S)
         changeOnHover(self.showHidePasswordButton, "#d1d1d1", "white")
 
@@ -138,4 +138,4 @@ class DetectHistory(tk.Frame):
         self.labelRegistrationInfo.config(text="")
         self.historyTextPlaceholder.delete('1.0', END)
         self.passwordEntry.config(show='*')
-        self.showHidePasswordButton.configure(image=self.showPasswordImage)
+        self.showHidePasswordButton.configure(image=self.hidePasswordImage)
